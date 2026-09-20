@@ -40,7 +40,7 @@ class TbrTeamController extends Controller
     public function replaceForSchool(Request $request, string $schoolId): JsonResponse
     {
         $validated = $request->validate([
-            'teams' => 'required|array',
+            'teams' => 'array',
             'teams.*.category_id' => 'required|exists:tbr_categories,id',
             'teams.*.name' => 'required|string|max:255',
         ]);

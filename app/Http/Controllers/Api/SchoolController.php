@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\School;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -27,6 +28,7 @@ class SchoolController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate(static::rules());
+        $validated = static::normalizeNullableStrings($validated);
 
         return response()->json(School::create($validated), 201);
     }
@@ -51,6 +53,8 @@ class SchoolController extends Controller
             'active' => 'sometimes|boolean',
         ]);
 
+        $validated = static::normalizeNullableStrings($validated);
+
         $school->update($validated);
 
         return response()->json($school);
@@ -65,7 +69,26 @@ class SchoolController extends Controller
 
     public function users(School $school): JsonResponse
     {
-        return response()->json($school->users()->get());
+        return response()->json($school->users()->with('roleModel')->get(['users.*', 'user_schools.nap']));
+    }
+
+    public function replaceUsers(Request $request, School $school): JsonResponse
+    {
+        $validated = $request->validate([
+            'user_links' => 'required|array',
+            'user_links.*.user_id' => 'required|exists:users,id',
+            'user_links.*.nap' => 'nullable|string|max:20',
+        ]);
+
+        \App\Support\NapCapacity::assertFinalCountsWithinLimit($validated['user_links']);
+
+        $pivot = collect($validated['user_links'])
+            ->mapWithKeys(fn ($l) => [$l['user_id'] => ['nap' => $l['nap'] ?? null]])
+            ->all();
+
+        $school->users()->sync($pivot);
+
+        return response()->json($school->users()->with('roleModel')->get(['users.*', 'user_schools.nap']));
     }
 
     protected static function rules(?string $id = null): array
@@ -82,5 +105,16 @@ class SchoolController extends Controller
             'schedule_type' => 'sometimes|in:semanal,quinzenal,',
             'active' => 'sometimes|boolean',
         ];
+    }
+
+    protected static function normalizeNullableStrings(array $data): array
+    {
+        foreach (['address', 'region', 'state', 'city'] as $field) {
+            if (array_key_exists($field, $data) && $data[$field] === null) {
+                $data[$field] = '';
+            }
+        }
+
+        return $data;
     }
 }

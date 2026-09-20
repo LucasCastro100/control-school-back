@@ -55,6 +55,6 @@ class School extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'user_schools');
+        return $this->belongsToMany(User::class, 'user_schools')->withPivot('nap');
     }
 }

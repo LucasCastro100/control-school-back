@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\ItemController;
 use App\Http\Controllers\Api\NapItemController;
 use App\Http\Controllers\Api\OrientadorScheduleController;
 use App\Http\Controllers\Api\RoomController;
+use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\ScheduleController;
 use App\Http\Controllers\Api\SchoolClassController;
 use App\Http\Controllers\Api\SchoolController;
@@ -24,6 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('schools', SchoolController::class);
     Route::get('/schools/{school}/users', [SchoolController::class, 'users']);
+    Route::put('/schools/{school}/users', [SchoolController::class, 'replaceUsers']);
 
     Route::apiResource('classes', SchoolClassController::class);
     Route::apiResource('rooms', RoomController::class);
@@ -56,4 +58,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/users/{user}/schools', [UserController::class, 'replaceSchools']);
     Route::post('/users/{user}/schools', [UserController::class, 'addSchool']);
     Route::delete('/users/{user}/schools/{schoolId}', [UserController::class, 'removeSchool']);
+
+    Route::apiResource('roles', RoleController::class);
 });

@@ -12,6 +12,7 @@ class UserSchool extends Model
     protected $fillable = [
         'user_id',
         'school_id',
+        'nap',
     ];
 
     public function user(): BelongsTo
