@@ -67,6 +67,11 @@ class AgendaController extends Controller
             'start_time' => 'required|string',
             'end_time' => 'required|string',
             'activity' => 'required|string',
+            'registrar_mundoz' => 'sometimes|boolean',
+            'escola' => 'nullable|string',
+            'ano' => 'nullable|string',
+            'tipo' => 'nullable|string',
+            'confirmado_por' => 'nullable|string',
             'orientador_ids' => 'sometimes|array',
             'orientador_ids.*' => 'exists:users,id',
         ];

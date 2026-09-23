@@ -17,6 +17,11 @@ class Agenda extends Model
         'start_time',
         'end_time',
         'activity',
+        'registrar_mundoz',
+        'escola',
+        'ano',
+        'tipo',
+        'confirmado_por',
     ];
 
     public function orientadores(): BelongsToMany

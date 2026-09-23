@@ -62,6 +62,22 @@ class UserController extends Controller
         return response()->json($user->schools()->get(['schools.*', 'user_schools.nap']));
     }
 
+    public function mundoz(Request $request, User $user): JsonResponse
+    {
+        $current = $request->user();
+        $isOwner = $current && $current->id === $user->id;
+        $isAdmin = $current && $current->role === 'admin';
+
+        if (! $isOwner && ! $isAdmin) {
+            return response()->json(['message' => 'Não autorizado.'], 403);
+        }
+
+        return response()->json([
+            'mundoz_user' => $user->mundoz_user,
+            'mundoz_password' => $user->mundoz_password,
+        ]);
+    }
+
     public function replaceSchools(Request $request, User $user): JsonResponse
     {
         $validated = $request->validate([
@@ -130,6 +146,8 @@ class UserController extends Controller
             'password' => 'sometimes|string|min:6',
             'role' => 'required|in:admin,orientador,professor,escola',
             'role_id' => 'nullable|exists:roles,id',
+            'mundoz_user' => 'nullable|string|max:255',
+            'mundoz_password' => 'nullable|string|max:255',
         ];
     }
 
@@ -141,6 +159,8 @@ class UserController extends Controller
             'password' => 'sometimes|string|min:6',
             'role' => 'sometimes|in:admin,orientador,professor,escola',
             'role_id' => 'nullable|exists:roles,id',
+            'mundoz_user' => 'nullable|string|max:255',
+            'mundoz_password' => 'nullable|string|max:255',
         ];
     }
 }

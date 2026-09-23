@@ -55,6 +55,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('users', UserController::class);
     Route::get('/users/{user}/schools', [UserController::class, 'schools']);
+    Route::get('/users/{user}/mundoz', [UserController::class, 'mundoz']);
     Route::put('/users/{user}/schools', [UserController::class, 'replaceSchools']);
     Route::post('/users/{user}/schools', [UserController::class, 'addSchool']);
     Route::delete('/users/{user}/schools/{schoolId}', [UserController::class, 'removeSchool']);

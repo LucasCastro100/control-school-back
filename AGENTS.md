@@ -71,6 +71,7 @@ Boost replaces these bootstrap instructions with guidelines tailored to the appl
 
 ## Histórico de mudanças recentes
 
+- **Credenciais MundoZ por usuário**: migration `2026_09_22_000000_add_mundoz_credentials_to_users_table` adiciona `users.mundoz_user` + `users.mundoz_password` (senha em texto puro — necessária pra automação navegar na plataforma). `User::$fillable` ganhou os campos; `mundoz_password` está em `$hidden` (não sai no JSON padrão de usuário). Endpoint novo `GET /api/users/{user}/mundoz` devolve `{mundoz_user, mundoz_password}` apenas para o próprio usuário ou admin (`UserController::mundoz`). Regras de store/update do `UserController` aceitam `mundoz_user`/`mundoz_password` (nullable, max 255).
 - Relação `role()` renomeada para `roleModel()` (+ `role_model` em `$hidden`) — corrige conflito coluna `role` × relação na serialização JSON (crash `"Attempt to read property \"permissions\" on string"` em `User.php`, e `role` como objeto em `/api/users`, `/api/schools/{school}/users`).
 - Eager loads atualizados: `UserController` (`roleModel`, `schools`), `SchoolController` (`->with('roleModel')`).
 - `PUT /api/tbr-teams/replace-for-school/{schoolId}`: validação de `teams` mudou de `required|array` para `array` (permite criar escola sem equipes).
