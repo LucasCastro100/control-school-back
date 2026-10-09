@@ -24,7 +24,7 @@ class ItemController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'category' => 'required|in:tapete,tecnologia',
+            'category' => 'required|in:tapete,tecnologia,materiais',
             'naps' => 'sometimes|array',
         ]);
 
@@ -40,7 +40,7 @@ class ItemController extends Controller
     {
         $validated = $request->validate([
             'name' => 'sometimes|string|max:255',
-            'category' => 'sometimes|in:tapete,tecnologia',
+            'category' => 'sometimes|in:tapete,tecnologia,materiais',
             'naps' => 'sometimes|array',
         ]);
 

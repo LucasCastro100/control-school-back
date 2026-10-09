@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\OrientadorScheduleController;
 use App\Http\Controllers\Api\RoomController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\ScheduleController;
+use App\Http\Controllers\Api\SchoolSegmentController;
 use App\Http\Controllers\Api\SchoolClassController;
 use App\Http\Controllers\Api\SchoolController;
 use App\Http\Controllers\Api\SegmentConfigController;
@@ -30,6 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('classes', SchoolClassController::class);
     Route::apiResource('rooms', RoomController::class);
     Route::apiResource('schedules', ScheduleController::class);
+    Route::apiResource('school-segments', SchoolSegmentController::class)->only(['index', 'store', 'destroy']);
 
     Route::apiResource('orientador-schedules', OrientadorScheduleController::class);
     Route::delete('/orientador-schedules/by-school/{schoolId}', [OrientadorScheduleController::class, 'destroyBySchool']);

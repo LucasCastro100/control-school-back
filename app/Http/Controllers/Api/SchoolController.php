@@ -69,7 +69,7 @@ class SchoolController extends Controller
 
     public function users(School $school): JsonResponse
     {
-        return response()->json($school->users()->with('roleModel')->get(['users.*', 'user_schools.nap']));
+        return response()->json($school->users()->with(['roleModel', 'schools'])->get());
     }
 
     public function replaceUsers(Request $request, School $school): JsonResponse
@@ -88,7 +88,7 @@ class SchoolController extends Controller
 
         $school->users()->sync($pivot);
 
-        return response()->json($school->users()->with('roleModel')->get(['users.*', 'user_schools.nap']));
+        return response()->json($school->users()->with(['roleModel', 'schools'])->get());
     }
 
     protected static function rules(?string $id = null): array
